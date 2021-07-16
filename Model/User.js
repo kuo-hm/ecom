@@ -26,4 +26,4 @@ var userSchema = mongoose.Schema({
   },
 });
 //export the user schema
-module.exports = User = mongoose.model("user", UserSchema);
+module.exports = User = mongoose.model("user", userSchema);
