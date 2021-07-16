@@ -1,0 +1,4 @@
+{
+  "dbURI": "mongodb+srv://kuo:kuo@movie.kv57y.mongodb.net/Ecom?retryWrites=true&w=majority",
+  "jwtsecret": "qsdz23qvsd"
+}

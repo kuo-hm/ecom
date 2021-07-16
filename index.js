@@ -1,14 +1,29 @@
-//Express server
-var express = require("express");
-var app = express();
-var port = process.env.PORT || 3000;
-var server = app.listen(port, function () {
-  console.log("Listening on port %d", port);
-});
-server.on("error", function (err) {
-  if (err.errno === "EADDRINUSE") {
-    console.log("Port " + port + " is already in use, try a different port.");
-  } else {
-    throw err;
-  }
-});
+const express = require("express");
+const mongoose = require("mongoose");
+const path = require("path");
+const config = require("config");
+
+const app = express();
+app.use(express.json());
+
+// used in production to serve client files
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
+
+// connecting to mongoDB and then running server on port 4000
+const dbURI = config.get("dbURI");
+const port = process.env.PORT || 4000;
+mongoose
+  .connect(dbURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
+  .then((result) => app.listen(port))
+  .then(() => console.log(`Server running on port ${port}`))
+  .then(() => console.log("MongoDB connected!"))
+  .catch((err) => console.log(err));
